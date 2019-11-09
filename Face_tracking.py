@@ -1,7 +1,7 @@
 import cv2
 cap=cv2.VideoCapture(1)
 frameCount = 0
-
+#halloyo
 
 while cap.isOpened():
     ret, frame = cap.read() 
