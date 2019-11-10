@@ -1,0 +1,26 @@
+#N canvas -16 -16 3840 1955 10;
+#X obj 473 11 netreceive 3000;
+#X msg 1229 107 \; pd dsp 1;
+#X obj 1229 36 loadbang;
+#X obj 1229 76 del 100;
+#X text 1145 75 important ->;
+#X obj 574 77 route 0 1 2;
+#X text 562 34 0=Frequenz 1=Volume werte von 0-1 2= welcher sopund
+(1=8bit 0=sinus;
+#X floatatom 474 225 5 0 0 0 - - -;
+#X text 257 93 zum testen (so wie print zwischendurch);
+#X obj 513 582 dac~;
+#X obj 509 388 osc~;
+#X obj 660 256 * 0.01;
+#X floatatom 679 175 5 0 0 0 - - -;
+#X obj 513 468 *~;
+#X connect 0 0 5 0;
+#X connect 2 0 3 0;
+#X connect 3 0 1 0;
+#X connect 5 0 7 0;
+#X connect 5 1 12 0;
+#X connect 7 0 10 0;
+#X connect 10 0 13 0;
+#X connect 11 0 13 1;
+#X connect 12 0 11 0;
+#X connect 13 0 9 0;
