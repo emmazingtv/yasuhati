@@ -12,7 +12,7 @@
 #X obj 513 582 dac~;
 #X obj 509 388 osc~;
 #X obj 660 256 * 0.01;
-#X floatatom 679 175 5 0 0 0 - - -;
+#X floatatom 663 163 5 0 0 0 - - -;
 #X obj 513 468 *~;
 #X connect 0 0 5 0;
 #X connect 2 0 3 0;
