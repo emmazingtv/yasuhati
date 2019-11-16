@@ -55,7 +55,7 @@ while cap.isOpened():
    
 
     faces = face_cascade.detectMultiScale(gray, 1.3, 5) 
-    for (x,y,w,h) in faces:
+    for (x,y,w,h) in faces
         cx=int(x)+int(w/2)
         
         X_list = calculateMedian(cx, pastxValues)
