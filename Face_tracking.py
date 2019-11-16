@@ -3,7 +3,7 @@ import socket
 import os
 
 
-cap=cv2.VideoCapture(1)
+cap=cv2.VideoCapture(0)
 frameCount = 0
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 medianLength = 25
