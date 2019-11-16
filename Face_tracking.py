@@ -1,10 +1,14 @@
 import cv2
 import socket
+import os
+
 
 cap=cv2.VideoCapture(1)
 frameCount = 0
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 medianLength = 25
+pastxValues=[0]*medianLength
+pastyValues=[0]*medianLength
 
 def send_Frequenz_and_Volume_to_pure_Data(x,y):
     
@@ -33,7 +37,6 @@ def send_Frequenz_and_Volume_to_pure_Data(x,y):
 
 def calculateMedian(value, pastValues):
     for i in range(0,len(pastValues)-1,1):
-        ##pastValues[4-i]=i
         pastValues[len(pastValues)-1-i]=pastValues[len(pastValues)-2-i]
     pastValues[0]=value
     summe=0
@@ -42,8 +45,9 @@ def calculateMedian(value, pastValues):
     summe=summe/len(pastValues)
     median=0.7*value+0.2*summe+0.05*pastValues[1]+0.05*pastValues[2]
     return [median, pastValues]
-pastxValues=[0]*medianLength
-pastyValues=[0]*medianLength
+
+
+
 while cap.isOpened():
     ret, frame = cap.read() 
     if ret == False: ## checkt is ein videobild da
@@ -55,7 +59,7 @@ while cap.isOpened():
    
 
     faces = face_cascade.detectMultiScale(gray, 1.3, 5) 
-    for (x,y,w,h) in faces
+    for (x,y,w,h) in faces:
         cx=int(x)+int(w/2)
         
         X_list = calculateMedian(cx, pastxValues)
@@ -66,12 +70,17 @@ while cap.isOpened():
         medianY = y_List[0]
         ##print(pastxValues, pastyValues)
         cv2.circle(frame,(int(medianX), int(medianY)), 5, (0,0,255), cv2.FILLED)        
-        send_Frequenz_and_Volume_to_pure_Data(medianX+200,medianY)
+        try:
+            send_Frequenz_and_Volume_to_pure_Data(medianX+200,medianY)
+        except ConnectionRefusedError:
+            print("nur für ein gesicht gedacht warte eine sekunde")##muss auch ins overlay
+            os.startfile("Zound.pd") 
         
     cv2.imshow("Video", frame) ##ohne seperation
     
     c = cv2.waitKey(30)
     if ' ' == chr(c & 255):
+        os.kill("Pure Data (64-bit)")
         break
 
     
