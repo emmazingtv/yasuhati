@@ -69,7 +69,7 @@ while cap.isOpened():
         medianX = X_list[0]
         medianY = y_List[0]
         ##print(pastxValues, pastyValues)
-        cv2.circle(frame,(int(medianX), int(medianY)), 5, (0,0,255), cv2.FILLED)        
+        cv2.circle(frame,(int(medianX), int(medianY)), 5, (240, 120, 240), cv2.FILLED)        
         try:
             send_Frequenz_and_Volume_to_pure_Data(medianX+200,medianY)
         except ConnectionRefusedError:
