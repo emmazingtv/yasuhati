@@ -1,4 +1,4 @@
-#N canvas 0 0 3840 1955 10;
+#N canvas -16 -16 3840 1955 10;
 #X obj 473 11 netreceive 3000;
 #X msg 124 62 \; pd dsp 1;
 #X obj 124 -16 loadbang;
@@ -7,7 +7,7 @@
 #X obj 574 94 route 0 1 2;
 #X text 602 10 0=Frequenz 1=Volume werte von 0-1 2= welcher sopund
 (1=8bit 0=sinus;
-#X floatatom 543 117 5 0 0 0 - - -;
+#X floatatom 549 123 5 0 0 0 - - -;
 #X text 257 93 zum testen (so wie print zwischendurch);
 #X obj 758 1000 dac~;
 #X obj 458 722 osc~;
@@ -50,7 +50,7 @@
 #X obj 1370 685 tabread~ hanning;
 #X obj 1137 649 tabread~ hanning;
 #X msg 812 133 0;
-#X obj 1681 655 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
+#X obj 1534 427 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144
 -1 -1;
 #N canvas 0 50 450 250 (subpatch) 0;
 #X array hanning 256 float 5;
@@ -88,19 +88,21 @@
 0.146443 0.113491 0.084262 0.0590366 0.038058 0.0215281 0.00960615
 0.00240701;
 #X coords 0 1 255 -1 200 140 2 0 0;
-#X restore 1853 719 graph;
+#X restore 1706 491 graph;
 #X obj 1020 736 *~ 0.6;
 #X obj 1244 685 tabread4~ array2;
-#X obj 1681 692 Uzi 256;
-#X obj 1684 719 t f f;
-#X obj 1685 748 / 128;
-#X obj 1686 784 - 1;
-#X obj 1687 813 t f b;
-#X obj 1692 846 *;
-#X obj 1723 842 pi;
-#X obj 1709 885 expr 0.5+0.5*cos($f1);
-#X obj 1713 928 tabwrite hanning;
+#X obj 1534 464 Uzi 256;
+#X obj 1537 491 t f f;
+#X obj 1538 520 / 128;
+#X obj 1539 556 - 1;
+#X obj 1540 585 t f b;
+#X obj 1545 618 *;
+#X obj 1576 614 pi;
+#X obj 1562 657 expr 0.5+0.5*cos($f1);
+#X obj 1566 700 tabwrite hanning;
 #X obj 1021 794 *~ 0;
+#X obj 1168 288 loadbang;
+#X obj 958 273 / 2;
 #X connect 0 0 5 0;
 #X connect 2 0 3 0;
 #X connect 3 0 1 0;
@@ -108,6 +110,7 @@
 #X connect 5 1 12 0;
 #X connect 5 2 14 0;
 #X connect 7 0 10 0;
+#X connect 7 0 62 0;
 #X connect 10 0 17 0;
 #X connect 11 0 15 0;
 #X connect 11 0 13 0;
@@ -170,3 +173,6 @@
 #X connect 58 0 59 0;
 #X connect 60 0 9 0;
 #X connect 60 0 9 1;
+#X connect 61 0 25 0;
+#X connect 61 0 47 0;
+#X connect 62 0 35 0;

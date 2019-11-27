@@ -74,7 +74,7 @@ while cap.isOpened():
             send_Frequenz_and_Volume_to_pure_Data(medianX+200,medianY)
         except ConnectionRefusedError:
             print("nur für ein gesicht gedacht warte eine sekunde")##muss auch ins overlay
-            os.startfile("Zound.pd") 
+            os.startfile("Zound_extended.pd") 
         
     cv2.imshow("Video", frame) ##ohne seperation
     
