@@ -1,4 +1,4 @@
-import cv2
+pytjo import cv2
 import numpy as np
 
 def nothing(x):
