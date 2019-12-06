@@ -21,6 +21,12 @@ class Thread(QThread):
                 self.changePixmap.emit(p)
 
 
+
+
+
+                
+
+
 class App(QWidget):
     def __init__(self):
         super().__init__()

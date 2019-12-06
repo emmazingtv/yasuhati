@@ -1,4 +1,4 @@
-#N canvas 0 0 3840 1955 10;
+#N canvas 0 0 1924 1011 10;
 #X obj 473 11 netreceive 3000;
 #X msg 124 62 \; pd dsp 1;
 #X obj 124 -16 loadbang;
@@ -108,6 +108,7 @@
 #X connect 3 0 1 0;
 #X connect 5 0 7 0;
 #X connect 5 1 12 0;
+#X connect 5 2 14 0;
 #X connect 7 0 10 0;
 #X connect 7 0 62 0;
 #X connect 10 0 17 0;
