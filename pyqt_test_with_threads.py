@@ -77,7 +77,13 @@ class Worker(QRunnable):
     '''
     Worker thread
     '''
-    changePixmap = pyqtSignal(QImage)
+    #changePixmap = pyqtSignal(QImage)
+
+    
+    def __init__(self, *args, **kwargs):
+        super(Worker, self).__init__()
+        self.args = args
+        self.kwargs = kwargs
 
     @pyqtSlot()
     def run(self):
@@ -91,6 +97,9 @@ class Worker(QRunnable):
         print("Thread start") 
         cap = cv2.VideoCapture(0)
         while True:
+            args=self.args
+            kwargs=self.kwargs
+            print(args)
             ret, frame = cap.read()
             if ret == False: ## checkt is ein videobild da
                 break
@@ -124,7 +133,7 @@ class Example(QWidget):
 
         self.threadpool = QThreadPool()
         print("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
-
+        
         app.setStyle('Fusion')
         app.setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }")
         self.button()
@@ -137,23 +146,26 @@ class Example(QWidget):
         self.Slider()
         self.show()
         self.grid()
+        #self.Platzhalter()
 
         
 
         
 
     def oh_no(self):
+        args=(1,2,3)
         worker = Worker()
         self.threadpool.start(worker) 
 
-    # def paintEvent (self, event):
-    #     global medianX
-    #     global medianY
-    #     painter=QPainter(self)
-    #     painter.setPen(QPen(Qt.red, 10, Qt.SolidLine))
-    #     painter.setBrush(QBrush(Qt.red, Qt.SolidPattern)) 
+    def paintEvent (self, event):
+        global medianX
+        global medianY
+        painter=QPainter(self)
+        painter.setPen(QPen(Qt.black, 3, Qt.SolidLine))
+        painter.setBrush(QBrush(Qt.green, Qt.SolidPattern)) 
 
-    #     painter.drawEllipse(medianX, medianY, 10,10)
+        painter.drawEllipse(medianX, medianY, 10,10)
+        painter.drawRect(560, 110, 800,545)
 
     def Genral(self):
         self.setGeometry(0, 0, 1920, 1080)
@@ -165,7 +177,15 @@ class Example(QWidget):
         button.setGeometry(890,890,140,70)
         newfont = QFont("Times", 40, QFont.Bold) 
         button.setFont(newfont)
-    
+
+    # def Platzhalter(self,event):
+    #     painter=QPainter(self)
+    #     painter.setPen(QPen(Qt.red, 10, Qt.SolidLine))
+    #     painter.setBrush(QBrush(Qt.red, Qt.SolidPattern)) 
+        
+
+        #pltzhltr = QRectF(400,400,400,400)
+        
 
     def Dropdown(self):      
 
@@ -178,13 +198,20 @@ class Example(QWidget):
         combo.addItem("Schrei")
         newfont = QFont("Times", 30, QFont.Bold) 
         combo.setFont(newfont)
-       
+
         combo.setGeometry(85,190,250,80)
         self.lbl.move(110, 110)
         newfont2 = QFont("Times", 40, QFont.Bold) 
         self.lbl.setFont(newfont2)
 
-        combo.activated[str].connect(self.onActivated)        
+        combo.activated[str].connect(self.onActivatedCombo)  
+
+    def onActivatedCombo(self, text):
+      
+        #self.lbl.setText(text)
+        #self.lbl.adjustSize() 
+        currentMode=text      #entweder returenen oder global variable oder noch ne funktion die die variablen ändert
+        
 
     def Drehknopf(self):
         labeldial = QLabel("Volume", self)
@@ -197,10 +224,11 @@ class Example(QWidget):
         newfont2 = QFont("Times", 40, QFont.Bold) 
         labeldial.setFont(newfont2)
 
-    def onActivated(self, text):
-      
-        #self.lbl.setText(text)
-        self.lbl.adjustSize()  
+        dial.valueChanged[int].connect(self.onActivatedDial) #he dial also emits sliderPressed() and sliderReleased() signals when the mouse button is pressed and released. Note that the dial’s value can change without these signals being emitted since the keyboard and wheel can also be used to change the value
+
+    def onActivatedDial(self, number):
+        currentVolume=number
+
     
     def Frequenzbereich(self):
         labelfrequenz = QLabel("Frequenzbereich", self)
@@ -224,6 +252,16 @@ class Example(QWidget):
         newfont2 = QFont("Times", 35, QFont.Bold) 
         labelfrequenz.setFont(newfont2)
 
+        spinBox1.valueChanged[int].connect(self.onActivatedSpinBox1)
+        spinBox2.valueChanged[int].connect(self.onActivatedSpinBox2)
+
+    def onActivatedSpinBox1(self, nummer):
+        currentMinFrequency=nummer
+    def onActivatedSpinBox2(self, nummer):
+        currentMaxFrequency=nummer
+
+
+
     def Slider(self):
         labelslider = QLabel("make your own sound", self)
 
@@ -242,6 +280,11 @@ class Example(QWidget):
         labelslider.move(15, 300)
         newfont2 = QFont("Times", 30, QFont.Bold) 
         labelslider.setFont(newfont2)
+
+        slider.valueChanged[int].connect(self.onActivatedSlider)
+
+    def onActivatedSlider(self, nummer):
+        currentDiySound=nummer
 
         
     
