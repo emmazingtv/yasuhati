@@ -109,13 +109,17 @@ def send_Frequenz_and_Volume_to_pure_Data(x,y,modus):
     message = "6 " + str(DiySound4) + " ;" #Need to add " ;" at the end so pd knows when you're finished writing.
     s.send(message.encode('utf-8'))
 
+class WorkerSignals(QObject):
+    x = pyqtSignal(int, int)
+    y = pyqtSignal(int)
 class Worker(QRunnable):
     '''
     Worker thread
     '''
     #changePixmap = pyqtSignal(QImage)
-
-    
+    def __init__(self):
+        super(Worker, self).__init__()
+        self.signals = WorkerSignals()
 
     @pyqtSlot()
     def run(self):
@@ -125,6 +129,7 @@ class Worker(QRunnable):
         global medianY
         global currentMode
         global currentVolume
+        
         '''
         Your code goes in this function
         '''
@@ -151,6 +156,9 @@ class Worker(QRunnable):
                 pastyValues = y_List[1]
                 medianX = X_list[0]
                 medianY = y_List[0]
+                self.signals.x.emit(medianX,medianY)
+                
+                
                 
                 try:
                     send_Frequenz_and_Volume_to_pure_Data(medianX+200,medianY,currentMode)
@@ -165,7 +173,7 @@ class Example(QWidget):
         
         
         super().__init__()
-
+        
         self.threadpool = QThreadPool()
         print("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
         
@@ -181,27 +189,45 @@ class Example(QWidget):
         self.Dropdown()
         self.Frequenzbereich()
         self.Slider()
-        self.show()
         self.grid()
+        self.symbols()
+        self.PositionLabel()
+        #self.Frequenz_Volume()
+        self.show()
         #self.Platzhalter()
 
         
-
+    
         
 
     def oh_no(self):
         worker = Worker()
+        
+        worker.signals.x.connect(self.Frequenz_Volume)
         self.threadpool.start(worker) 
+    def PositionLabel(self):
+        self.XLabel = QLabel("position", self)
+        pixmap = QPixmap('saebelzahn_kopf.png')
+        self.XLabel.setPixmap(pixmap)
+        #self.XLabel.move(50, 50)
+        self.XLabel.move(925,405 )
+        self.XLabel.show()
+    
+    def Frequenz_Volume(self, x, y):
+        print("dis is"+ str(x))
+        x=5/4*x+560
+        y=5/4*y+110
+        
+        self.XLabel.move(x,y)
+
 
     def paintEvent (self, event):
-        global medianX
-        global medianY
+    
         painter=QPainter(self)
         painter.setPen(QPen(Qt.black, 3, Qt.SolidLine))
         painter.setBrush(QBrush(Qt.green, Qt.SolidPattern)) 
 
-        painter.drawEllipse(medianX, medianY, 10,10)
-        painter.drawRect(560, 110, 800,545)
+        painter.drawRect(560, 110, 800,600)
 
     def Genral(self):
         self.setGeometry(0, 0, 1920, 1080)
@@ -228,9 +254,9 @@ class Example(QWidget):
         self.lbl = QLabel("Modus", self)
 
         combo = QComboBox(self)
-        combo.addItem("Sound 1")
+        combo.addItem("Sinus")
         combo.addItem("Sound 2")
-        combo.addItem("Sound 3")
+        combo.addItem("DIY")
         combo.addItem("Schrei")
         newfont = QFont("Times", 30, QFont.Bold) 
         combo.setFont(newfont)
@@ -247,9 +273,9 @@ class Example(QWidget):
         #self.lbl.setText(text)
         #self.lbl.adjustSize() 
         modedict={
-            "Sound 1": 0,
+            "Sinus": 0,
             "Sound 2": 1,
-            "Sound 3": 2,
+            "DIY": 2,
             "Schrei" : 3,
 
         }
@@ -299,6 +325,8 @@ class Example(QWidget):
 
         spinBox1.valueChanged[int].connect(self.onActivatedSpinBox1)
         spinBox2.valueChanged[int].connect(self.onActivatedSpinBox2)
+    
+
 
     def onActivatedSpinBox1(self, nummer):
         global currentMinFrequency
@@ -314,19 +342,19 @@ class Example(QWidget):
 
         slider = QSlider(Qt.Horizontal, self)
         slider.setValue(40)
-        slider.setGeometry(15,360,450,30)
+        slider.setGeometry(75,375,390,30)
 
         slider2 = QSlider(Qt.Horizontal, self)
         slider2.setValue(50)
-        slider2.setGeometry(15,430,450,30)
+        slider2.setGeometry(75,445,390,30)
 
         slider3 = QSlider(Qt.Horizontal, self)
         slider3.setValue(60)
-        slider3.setGeometry(15,500,450,30)
+        slider3.setGeometry(75,515,390,30)
 
         slider4 = QSlider(Qt.Horizontal, self)
         slider4.setValue(60)
-        slider4.setGeometry(15,570,450,30)
+        slider4.setGeometry(75,585,390,30)
 
         labelslider.move(15, 300)
         newfont2 = QFont("Times", 30, QFont.Bold) 
@@ -349,6 +377,47 @@ class Example(QWidget):
     def onActivatedSlider4(self, nummer):
         global currentDiySound4
         currentDiySound4=nummer
+    
+    def symbols(self):
+        label = QLabel(self)
+        pixmap = QPixmap('sinus.png')
+        label.setPixmap(pixmap)
+        label.move(15, 360)#
+        
+        
+
+
+        label2 = QLabel(self)
+        pixmap2 = QPixmap('sägezahn.png')
+        label2.setPixmap(pixmap2)
+        label2.move(15, 430)
+       
+
+        label3 = QLabel(self)
+        pixmap3 = QPixmap('dreieck.png')
+        label3.setPixmap(pixmap3)
+        label3.move(15, 500)
+        
+
+        label4 = QLabel(self)
+        pixmap4 = QPixmap('rechteck.png')
+        label4.setPixmap(pixmap4)
+        label4.move(15, 570)
+        
+
+        slabel = QLabel(self)
+        spixmap = QPixmap('saebelzahn.png')
+        slabel.setPixmap(spixmap)
+        slabel.move(15, 900)
+        
+
+        slabel2 = QLabel(self)
+        spixmap2 = QPixmap('saebelzahn2.png')
+        slabel2.setPixmap(spixmap2)
+        slabel2.move(1755, 900)
+        
+
+   
 
         
     
