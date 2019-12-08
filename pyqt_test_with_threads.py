@@ -63,7 +63,7 @@ def send_Frequenz_and_Volume_to_pure_Data(x,y,modus):
     global currentDiySound2
     global currentDiySound3
     global currentDiySound4
-
+ ##jhwgjh
     s = socket.socket()
     host = socket.gethostname()
     port = 3000
