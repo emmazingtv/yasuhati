@@ -5,7 +5,7 @@ import sys
 import time
 
 
-
+import math
 import cv2
 import socket
 import os
@@ -72,24 +72,24 @@ def send_Frequenz_and_Volume_to_pure_Data(x,y,modus):
     width=640
     height=480 #einstellbar!!!!!!!
     frequency = ((x/width)*(currentMaxFrequency-currentMinFrequency)+currentMinFrequency)
+    ynew= -1*((y/height)*100)+100
+    print(ynew)
+    volume=(10**math.log2(((ynew))/25))*100
+    print(volume)
     #volume = 100-(-1/187500*((y/height)*maxVolume)**3 + 27/2500*((y/height)*maxVolume)**2 - 2/75*((y/height)*maxVolume))
-    volume = 100 - (47/2275000000*((y/height)*maxVolume)**5 - 1507/1137500000*((y/height)*maxVolume)**4 - 5671/39000000*((y/height)*maxVolume)**3 + 33233/1820000*((y/height)*maxVolume)**2 - 6169/54600*((y/height)*maxVolume))
+    #volume = 100 - (47/2275000000*((y/height)*maxVolume)**5 - 1507/1137500000*((y/height)*maxVolume)**4 - 5671/39000000*((y/height)*maxVolume)**3 + 33233/1820000*((y/height)*maxVolume)**2 - 6169/54600*((y/height)*maxVolume))
     #volume=100-(10 ** (((y/height)*maxVolume)/50))-2
     volume=volume*currentVolume
     volume= int(volume)
-    if volume>100:
-        volume = 100
+    if volume>10000:
+        volume = 10000
     if volume<0:
         volume = 0
 
 
-    print(currentDiySound1)
+    
     diySoundGesamt = currentDiySound1+currentDiySound2+currentDiySound3+currentDiySound4
-    print(diySoundGesamt)
-    print(currentDiySound1)
     DiySound1 = 100*currentDiySound1 / diySoundGesamt
-    print(currentDiySound1)
-    print(DiySound1)
     DiySound2 = 100*currentDiySound2 / diySoundGesamt
     DiySound3 = 100*currentDiySound3 / diySoundGesamt
     DiySound4 = 100*currentDiySound4 / diySoundGesamt
@@ -214,7 +214,6 @@ class Example(QWidget):
         self.XLabel.show()
     
     def Frequenz_Volume(self, x, y):
-        print("dis is"+ str(x))
         x=5/4*x+560
         y=5/4*y+110
         
@@ -280,7 +279,7 @@ class Example(QWidget):
 
         }
         currentMode=modedict[text] 
-        print(currentMode)    #entweder returenen oder global variable oder noch ne funktion die die variablen ändert
+           #entweder returenen oder global variable oder noch ne funktion die die variablen ändert
         
 
     def Drehknopf(self):
