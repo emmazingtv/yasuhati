@@ -255,7 +255,7 @@ class Example(QWidget):
 
         combo = QComboBox(self)
         combo.addItem("Sinus")
-        combo.addItem("Sound 2")
+        combo.addItem("Depech Mode")
         combo.addItem("DIY")
         combo.addItem("Schrei")
         newfont = QFont("Times", 30, QFont.Bold) 
@@ -274,7 +274,7 @@ class Example(QWidget):
         #self.lbl.adjustSize() 
         modedict={
             "Sinus": 0,
-            "Sound 2": 1,
+            "Depech Mode": 1,
             "DIY": 2,
             "Schrei" : 3,
 
