@@ -63,7 +63,7 @@ def send_Frequenz_and_Volume_to_pure_Data(x,y,modus):
     global currentDiySound2
     global currentDiySound3
     global currentDiySound4
- ##jhwgjh
+ 
     s = socket.socket()
     host = socket.gethostname()
     port = 3000
@@ -73,9 +73,7 @@ def send_Frequenz_and_Volume_to_pure_Data(x,y,modus):
     height=480 #einstellbar!!!!!!!
     frequency = ((x/width)*(currentMaxFrequency-currentMinFrequency)+currentMinFrequency)
     ynew= -1*((y/height)*100)+100
-    print(ynew)
     volume=(10**math.log2(((ynew))/25))*100
-    print(volume)
     #volume = 100-(-1/187500*((y/height)*maxVolume)**3 + 27/2500*((y/height)*maxVolume)**2 - 2/75*((y/height)*maxVolume))
     #volume = 100 - (47/2275000000*((y/height)*maxVolume)**5 - 1507/1137500000*((y/height)*maxVolume)**4 - 5671/39000000*((y/height)*maxVolume)**3 + 33233/1820000*((y/height)*maxVolume)**2 - 6169/54600*((y/height)*maxVolume))
     #volume=100-(10 ** (((y/height)*maxVolume)/50))-2
@@ -116,7 +114,6 @@ class Worker(QRunnable):
     '''
     Worker thread
     '''
-    #changePixmap = pyqtSignal(QImage)
     def __init__(self):
         super(Worker, self).__init__()
         self.signals = WorkerSignals()
@@ -189,12 +186,11 @@ class Example(QWidget):
         self.Dropdown()
         self.Frequenzbereich()
         self.Slider()
-        self.grid()
         self.symbols()
         self.PositionLabel()
-        #self.Frequenz_Volume()
+        self.Logo()
         self.show()
-        #self.Platzhalter()
+        
 
         
     
@@ -202,23 +198,27 @@ class Example(QWidget):
 
     def oh_no(self):
         worker = Worker()
-        
         worker.signals.x.connect(self.Frequenz_Volume)
         self.threadpool.start(worker) 
+
     def PositionLabel(self):
         self.XLabel = QLabel("position", self)
         pixmap = QPixmap('saebelzahn_kopf.png')
         self.XLabel.setPixmap(pixmap)
-        #self.XLabel.move(50, 50)
         self.XLabel.move(925,405 )
         self.XLabel.show()
-    
+
+    def Logo(self):
+        LogoLabel = QLabel("Logo", self)
+        pixmap = QPixmap('Logo_transparent.PNG')
+        LogoLabel.setPixmap(pixmap)
+        LogoLabel.move(610,7)
+         
     def Frequenz_Volume(self, x, y):
         x=5/4*x+560
         y=5/4*y+110
         
         self.XLabel.move(x,y)
-
 
     def paintEvent (self, event):
     
@@ -238,16 +238,7 @@ class Example(QWidget):
         button.setGeometry(890,890,140,70)
         newfont = QFont("Times", 40, QFont.Bold) 
         button.setFont(newfont)
-
-    # def Platzhalter(self,event):
-    #     painter=QPainter(self)
-    #     painter.setPen(QPen(Qt.red, 10, Qt.SolidLine))
-    #     painter.setBrush(QBrush(Qt.red, Qt.SolidPattern)) 
-        
-
-        #pltzhltr = QRectF(400,400,400,400)
-        
-
+  
     def Dropdown(self):      
 
         self.lbl = QLabel("Modus", self)
@@ -281,7 +272,6 @@ class Example(QWidget):
         currentMode=modedict[text] 
            #entweder returenen oder global variable oder noch ne funktion die die variablen ändert
         
-
     def Drehknopf(self):
         labeldial = QLabel("Volume", self)
 
@@ -299,7 +289,6 @@ class Example(QWidget):
         global currentVolume
         currentVolume=number/100
 
-    
     def Frequenzbereich(self):
         labelfrequenz = QLabel("Frequenzbereich", self)
 
@@ -325,16 +314,13 @@ class Example(QWidget):
         spinBox1.valueChanged[int].connect(self.onActivatedSpinBox1)
         spinBox2.valueChanged[int].connect(self.onActivatedSpinBox2)
     
-
-
     def onActivatedSpinBox1(self, nummer):
         global currentMinFrequency
         currentMinFrequency=nummer
+   
     def onActivatedSpinBox2(self, nummer):
         global currentMaxFrequency
         currentMaxFrequency=nummer
-
-
 
     def Slider(self):
         labelslider = QLabel("make your own sound", self)
@@ -383,54 +369,31 @@ class Example(QWidget):
         label.setPixmap(pixmap)
         label.move(15, 360)#
         
-        
-
-
         label2 = QLabel(self)
         pixmap2 = QPixmap('sägezahn.png')
         label2.setPixmap(pixmap2)
         label2.move(15, 430)
        
-
         label3 = QLabel(self)
         pixmap3 = QPixmap('dreieck.png')
         label3.setPixmap(pixmap3)
         label3.move(15, 500)
         
-
         label4 = QLabel(self)
         pixmap4 = QPixmap('rechteck.png')
         label4.setPixmap(pixmap4)
         label4.move(15, 570)
         
-
         slabel = QLabel(self)
         spixmap = QPixmap('saebelzahn.png')
         slabel.setPixmap(spixmap)
         slabel.move(15, 900)
         
-
         slabel2 = QLabel(self)
         spixmap2 = QPixmap('saebelzahn2.png')
         slabel2.setPixmap(spixmap2)
         slabel2.move(1755, 900)
-        
-
-   
-
-        
     
-    def grid(self):
-         grid = QGridLayout()
-        #  grid.addWidget(self.button, 0, 0, alignment=Qt.AlignTop | Qt.AlignLeft)
-        #  grid.addWidget(self.lbl, 1, 0)
-        #  grid.addWidget(self.dial,  2, 3, alignment=Qt.AlignCenter)
-        #  grid.addWidget(self.combo,  2, 0, alignment=Qt.AlignTop | Qt.AlignLeft)
-        #  grid.addWidget(self.spinBox1,3,3)
-        #  grid.addWidget(self.spinBox2,4,3)
-       
-
-       
                 
 if __name__ == '__main__':
     
@@ -438,6 +401,3 @@ if __name__ == '__main__':
     dark_palette()
     ex = Example()
     sys.exit(app.exec_())
-  
-
-
